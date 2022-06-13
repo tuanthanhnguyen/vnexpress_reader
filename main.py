@@ -89,6 +89,7 @@ while True:
         elif option == "3":
             print("1 : Chọn các bài để đọc từ danh sách")
             print("2 : Bỏ các bài không muốn đọc trong danh sách & đọc các bài còn lại")
+            print("3 : Bỏ từ bài thứ n trở đi (nhập số n)")
             option = input("Lựa chọn : ")
             article_data = article_scraper("None")
             url_list = list(article_data.keys())
@@ -123,6 +124,14 @@ while True:
                         for i in selection:
                             url_list.remove(url_index[i-1])
                         break
+            if option == "3":
+                selection = int(input("Nhập số n : "))
+                new_list = []
+                for i in range(selection-1):
+                    new_list.append(url_index[i])
+                url_list = new_list.copy()
+
+
 
 
 
@@ -131,6 +140,7 @@ while True:
         for url in url_list:
             if article_data[url] == "": print("error..")
             print(article_data[url])
+        exit(0)
         for url in url_list:
             try:
                 rtitle=article_data[url]
