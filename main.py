@@ -16,6 +16,13 @@ version = "v1.0 beta"
 #-------------------------------------------------------------------------------
 logfile = "./Saved_articles/log/log_" + str(datetime.now()) + ".txt"
 article_data={}
+def selecion_splittor(selection_data):
+    selection = selection_data.split(",")
+    try:
+        selection = list(map(int, selection))
+    except ValueError:
+        selection = False
+    finally:return selection
 def article_scraper(arcount):
     counter = 1
     while True:# Đếm số bài tốt nhất (số bài có thay đổi theo thời gian)
@@ -24,21 +31,20 @@ def article_scraper(arcount):
             print("........")
             break
         article = dom.xpath(vne_xpath.get_best_article(counter)+"/@href")
-        title = dom.xpath(vne_xpath.get_best_article(counter)+"/text()")
+        title = dom.xpath(vne_xpath.get_best_article(counter)+"/@title")
         #print(article)
         if article != []:
             article_data[article[0]]=title[0]
             counter+=1
         else:break
     #print(article_data)
-    return url_list, article_data
+    return article_data
 print("Chào mừng đến phần mềm đọc tin trên Vnexpress.net")
 print(f"Version {version}")
 print("#"*60)
 print("1 : Chỉ đọc Top Story ( 3 bài )")
 print("2 : Đọc tất cả ( gồm Top Story và khoảng 20 Editor's Picks )")
 print("3 : Chọn các bài để đọc từ danh sách ở lựa chọn 2")
-print(" NOTE : LỰA CHỌN 3 CHƯA LÀM XONG")
 option = input("Lựa chọn : ")
 #########################  INIT  ##############################
 while True:
@@ -57,14 +63,56 @@ dom = etree.HTML(str(source))
 top_article = dom.xpath(vne_xpath.top_story+"/@href")
 top_2 = dom.xpath(vne_xpath.top2+"/@href")
 top_3 = dom.xpath(vne_xpath.top3+"/@href")
-article_data[top_article[0]] = top_article = dom.xpath(vne_xpath.top_story+"/text()")[0]
-article_data[top_2[0]] = top_2 = dom.xpath(vne_xpath.top2+"/text()")[0]
-article_data[top_3[0]] = top_3 = dom.xpath(vne_xpath.top3+"/text()")[0]
+article_data[top_article[0]] = top_article = dom.xpath(vne_xpath.top_story+"/@title")[0]
+article_data[top_2[0]] = top_2 = dom.xpath(vne_xpath.top2+"/@title")[0]
+article_data[top_3[0]] = top_3 = dom.xpath(vne_xpath.top3+"/@title")[0]
 #print(article_data)
 #----------------------------------------------------------------
-if option == "2":
-    url_list, article_data = article_scraper("None")
-url_list = list(article_data.keys())
+if option == "1":url_list = list(article_data.keys())
+elif option == "2":
+    article_data = article_scraper("None")
+    url_list = list(article_data.keys())
+elif option == "3":
+    print("1 : Chọn các bài để đọc từ danh sách")
+    print("2 : Bỏ các bài không muốn đọc trong danh sách & đọc các bài còn lại")
+    option = input("Lựa chọn : ")
+    article_data = article_scraper("None")
+    url_list = list(article_data.keys())
+    print("Danh sách bài đọc :" )
+    url_index = {}
+    for index, url in enumerate(url_list):
+        print(str(index+1)+" : "+article_data[url].replace("\n", ""))
+        url_index[index] = url
+    if option == "1":
+        while True:
+            selection_data = input("Chọn các bài muốn đọc (e.g: 1,2,3,4,5) :")
+            selection = selecion_splittor(selection_data)
+            if selection == False:
+                print("Bạn nhập lựa chọn không đúng,vui lòng nhập lại...")
+                continue
+            else :
+                new_list = []
+                selection.sort()
+                for i in selection:
+                    new_list.append(url_index[i-1])
+                url_list = new_list.copy()
+                break
+    elif option == "2":
+        while True:
+            selection_data = input("Chọn các bài muốn bỏ (e.g: 1,2,3,4,5) :")
+            selection = selecion_splittor(selection_data)
+            if selection == False:
+                print("Bạn nhập lựa chọn không đúng,vui lòng nhập lại...")
+                continue
+            else :
+                selection.sort()
+                for i in selection:
+                    url_list.remove(url_index[i-1])
+                break
+
+
+
+
 print("Các bài sẽ đọc:")
 for url in url_list:
     if article_data[url] == "": print("error..")

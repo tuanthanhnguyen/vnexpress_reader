@@ -2,3 +2,7 @@ Saved_articles/
 test2.py
 test.py
 __pycache__/
+venv/
+.idea/
+*.mp3
+*.html
