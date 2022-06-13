@@ -6,3 +6,10 @@ venv/
 .idea/
 *.mp3
 *.html
+.vs/
+dist/
+main.build/
+main.onefile-build/
+main.spec
+main.dist/
+build/

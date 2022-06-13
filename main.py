@@ -140,7 +140,6 @@ while True:
         for url in url_list:
             if article_data[url] == "": print("error..")
             print(article_data[url])
-        exit(0)
         for url in url_list:
             try:
                 rtitle=article_data[url]
