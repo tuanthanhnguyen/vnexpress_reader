@@ -51,7 +51,7 @@ jobs:
       with:
         name: Nuitka-release
         path: | 
-          main.dist/
+          main.exe
           src/config.ini
     
 
