@@ -10,6 +10,5 @@ venv/
 dist/
 main.build/
 main.onefile-build/
-main.spec
 main.dist/
 build/
