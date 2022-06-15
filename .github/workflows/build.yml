@@ -46,7 +46,7 @@ jobs:
         pip install nuitka
     - name: Run compilation
       run: |
-        python -m nuitka --onefile src/main.py
+        python -m nuitka --assume-yes-for-downloads --onefile src/main.py
     - uses: actions/upload-artifact@v3
       with:
         name: Nuitka-release
