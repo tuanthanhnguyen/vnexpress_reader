@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  Pack app with Pyinstaller:
+  Pack:
 
     runs-on: ubuntu-latest
 
@@ -25,7 +25,7 @@ jobs:
         path: | 
           src/dist/windows
           src/config.ini
-  Compile app with nuitka:
+  Compile:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v3
