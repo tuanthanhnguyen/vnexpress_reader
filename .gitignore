@@ -3,7 +3,7 @@ src/test2.py
 src/test.py
 src/__pycache__/
 src/venv/
-src/.idea
+src/.idea/
 src/*.mp3
 src/*.html
 src/.vs/
