@@ -22,6 +22,10 @@ except:
         print(f"Thoát trong {remaining} sec",end="\r")
         sleep(1)
     exit()
+data_paths = ["./Saved_articles/log/","./Saved_articles/text/","./Saved_articles/audio/"]
+for path in data_paths:
+    if not os.path.exists(path):
+        os.makedirs(path)
 version = "v1.0 beta"
 reader_notice = "Đang đọc bài: "
 end_notice = "Kết thúc bài đọc."
