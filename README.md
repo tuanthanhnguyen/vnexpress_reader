@@ -15,5 +15,3 @@ python main.py
 2. ```log_erors``` (True/False) : Lưu lại các lỗi khi chạy
 3. ```save_article_text``` (True/False) : Lưu bài đọc dưới dạng văn bản
 4. ```save_article_audio``` (True/False) : Lưu bài đọc dưới dạng văn âm thanh
-
-Tải phần mềm Win ở [đây](https://github.com/tuanthanhnguyen/vnexpress_reader/actions)
