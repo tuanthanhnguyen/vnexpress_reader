@@ -3,7 +3,7 @@ name: Build app with Pyinstaller
 on:
   push:
     branches: [ main ]
-    paths: |
+    paths:
       - '**.py'
       - '**.yml'
   pull_request:
