@@ -3,3 +3,4 @@ bs4
 lxml
 playsound==1.2.2
 gtts
+moviepy

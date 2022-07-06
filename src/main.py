@@ -4,11 +4,12 @@ import requests
 import vne_xpath
 from bs4 import BeautifulSoup
 import scraper
-from read import read
+from read import gg_recognise, play
 import os
 from datetime import datetime
 from configparser import ConfigParser
 from time import sleep
+import viettel_trial
 configur = ConfigParser()
 try:
     configur.read('config.ini')
@@ -16,7 +17,10 @@ try:
     log_errors = configur.getboolean("config", "log_errors")
     save_article_text = configur.getboolean("config", "log_errors")
     save_article_audio = configur.getboolean("config", "log_errors")
-except:
+    reader_choice = configur.get("config", "reader")
+    api_key = configur.get("config", "vt_key")
+    if api_key == None:api_key = ""
+except Exception:
     print("Sai kí tự ở file config.ini, hãy kiểm tra lại")
     for remaining in range(9,-1,-1):
         print(f"Thoát trong {remaining} sec",end="\r")
@@ -134,12 +138,6 @@ while True:
                 for i in range(selection-1):
                     new_list.append(url_index[i])
                 url_list = new_list.copy()
-
-
-
-
-
-
         print("Các bài sẽ đọc:")
         for url in url_list:
             if article_data[url] == "": print("error..")
@@ -152,14 +150,23 @@ while True:
                 filename = filename.replace(".html","")
             except:
                 print("Failed scraping article. Trying next one....")
-                read(None, "Phần mềm không lấy được văn bản từ bài báo, đang thử bài tiếp theo", False)
+                gg_recognise(None, "Phần mềm không lấy được văn bản từ bài báo, đang thử bài tiếp theo")
+                play("./speech.mp3", False)
                 continue
-            if rtitle !="" : read("./speech.mp3",reader_notice+rtitle,False)
+            if rtitle !="" : 
+                gg_recognise("./speech.mp3",reader_notice+rtitle)
+                play("./speech.mp3", False)
             if save_article_text :
                 with open("./Saved_articles/text/"+filename+".txt","w",encoding="utf-8") as article_file:
                     article_file.write(readed_text)
-            read("./Saved_articles/audio/"+filename+".mp3",readed_text,save_article_audio)
-            read("./speech.mp3",end_notice,False)
+            if reader_choice == "vt":
+                viettel_trial.vt_recognize("./Saved_articles/audio/"+filename+".mp3",readed_text,api_key)
+                play("./Saved_articles/audio/"+filename+".mp3", save_article_audio)
+            else:
+                gg_recognise("./Saved_articles/audio/"+filename+".mp3",readed_text)
+                play("./Saved_articles/audio/"+filename+".mp3", save_article_audio)
+            gg_recognise("./speech.mp3",end_notice)
+            play("./speech.mp3", False)
         break
 
 
