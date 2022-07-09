@@ -17,3 +17,6 @@ python main.py
 4. ```save_article_audio``` (True/False) : Save article as audio (mp3)
 5. ```reader``` (vt/gtts) : Choose TTS provider (Viettel / Google Translate)
 6. ```api_key``` (string) : Viettel AI API key (Leave blank if you don't have one)
+
+### I'm using the demo version for both Viettel & Google TTS options. Please do not abuse their API.
+### I strongly recommend you paste your API key into the ```config.ini``` file if you have one.
