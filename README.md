@@ -1,7 +1,20 @@
 # Voice reader for [Vnexpress](https://vnexpress.net)
 ### Reader for articles on Vnexpress
 
-## Usage:
+
+## Install dependencies:
+### ```ffmpeg```
+Linux
+```
+$ sudo apt update
+$ sudo apt install ffmpeg
+```
+Mac
+```
+brew install ffmpeg
+```
+Windows: grab binaries [here](https://ffmpeg.org/download.html) (add ffmpeg dir to PATH or else it won't work)
+## Usage
 ```
 git clone https://github.com/tuanthanhnguyen/vnexpress_reader.git
 cd vnexpress_reader/src
