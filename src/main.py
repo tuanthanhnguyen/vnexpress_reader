@@ -9,7 +9,7 @@ import os
 from datetime import datetime
 from configparser import ConfigParser
 from time import sleep
-import viettel_trial
+import viettel_trial, rss
 configur = ConfigParser()
 try:
     configur.read('config.ini')
@@ -69,37 +69,27 @@ while True:
         print("3 : Chọn các bài để đọc từ danh sách ở lựa chọn 2")
         option = input("Lựa chọn : ")
         #########################  INIT  ##############################
-        while True:
-            try:
-                page = requests.get('https://vnexpress.net/')   #Gửi request đến VNE
-                break
-            except:
-                print("Failed to connect to Vnexpress.net. Trying again...")
-        if save_html_content:
-            with open("content.html", "wb") as contentfile:
-                contentfile.write(page.content)
-        #----------------------------------------------------------------
-        source = BeautifulSoup(page.content, "html.parser")
-        dom = etree.HTML(str(source))
-        #----------------------------------------------------------------
-        top_article = dom.xpath(vne_xpath.top_story+"/@href")
-        top_2 = dom.xpath(vne_xpath.top2+"/@href")
-        top_3 = dom.xpath(vne_xpath.top3+"/@href")
-        article_data[top_article[0]] = top_article = dom.xpath(vne_xpath.top_story+"/@title")[0]
-        article_data[top_2[0]] = top_2 = dom.xpath(vne_xpath.top2+"/@title")[0]
-        article_data[top_3[0]] = top_3 = dom.xpath(vne_xpath.top3+"/@title")[0]
+        # lấy data của 3 bài đầu tiên (3 bài top)
+        rawdata,err = rss.get_articles("tin_noi_bat")
+        if err == True:
+            print("Có lỗi trong code. Đang thoát...")
+            exit(1)
+        rawlinks = list(rawdata.keys()) # list các link bài
         #print(article_data)
-        #----------------------------------------------------------------
-        if option == "1":url_list = list(article_data.keys())
-        elif option == "2":
-            article_data = article_scraper("None")
+        if option == "1": # Lấy 3 bài đầu
+            article_data[rawlinks[0]] = rawdata[rawlinks[0]]
+            article_data[rawlinks[1]] = rawdata[rawlinks[1]]
+            article_data[rawlinks[2]] = rawdata[rawlinks[2]]
+            url_list = list(article_data.keys())
+        elif option == "2": # lấy hết
+            article_data = rawdata
             url_list = list(article_data.keys())
         elif option == "3":
             print("1 : Chọn các bài để đọc từ danh sách")
             print("2 : Bỏ các bài không muốn đọc trong danh sách & đọc các bài còn lại")
             print("3 : Bỏ từ bài thứ n trở đi (nhập số n)")
             option = input("Lựa chọn : ")
-            article_data = article_scraper("None")
+            article_data = rawdata
             url_list = list(article_data.keys())
             print("Danh sách bài đọc :" )
             url_index = {}
@@ -132,7 +122,7 @@ while True:
                         for i in selection:
                             url_list.remove(url_index[i-1])
                         break
-            if option == "3":
+            elif option == "3":
                 selection = int(input("Nhập số n : "))
                 new_list = []
                 for i in range(selection-1):
