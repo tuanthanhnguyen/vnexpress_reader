@@ -23,16 +23,15 @@ def process(input,max):
                             data.append(hv)
                         else:#last resort (individual words)
                             words = hv.split()
-                            while True:
-                                phrase = ""
-                                if len(words) != 0:
-                                    for w in words:
-                                        if len(phrase+w) > max:
-                                            data.append(phrase)
-                                            phrase = ""
-                                        else:
-                                            phrase += w
-                                    data.append(phrase)
+                            phrase = ""
+                            if len(words) != 0:
+                                for w in words:
+                                    if len(phrase+w) > max:
+                                        data.append(phrase)
+                                        phrase = ""
+                                    else:
+                                        phrase += w
+                                data.append(phrase)
     result = []
     cell = ""
     for chunk in data:
